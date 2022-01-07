@@ -1,3 +1,7 @@
+clc
+clear all
+close all
+
 img = imread("1080454109_f73229da8b_z.jpg");
 nBlocks = 7;
 
@@ -7,15 +11,15 @@ nBlocks = 7;
 %T = R – 2G + B
 
 %Convert into LST Color Space
-L = double(img(:,:,1)) + double(img(:,:,2)) + double(img(:,:,3));
-S = double(img(:,:,1)) - double(img(:,:,3));
-T = double(img(:,:,1)) - 2 * double(img(:,:,2)) + double(img(:,:,3));
+Lmatrix = double(img(:,:,1)) + double(img(:,:,2)) + double(img(:,:,3));
+Smatrix = double(img(:,:,1)) - double(img(:,:,3));
+Tmatrix = double(img(:,:,1)) - 2 * double(img(:,:,2)) + double(img(:,:,3));
 
 %Generate the new double image
 LSTImage = zeros(size(img));
-LSTImage(:,:,1) = L;
-LSTImage(:,:,2) = S;
-LSTImage(:,:,3) = T;
+LSTImage(:,:,1) = Lmatrix;
+LSTImage(:,:,2) = Smatrix;
+LSTImage(:,:,3) = Tmatrix;
 
 
 %Determine the size of the rows and columns of the image to see if it
@@ -27,32 +31,32 @@ blockColumns = round(columnsSize/nBlocks);
 
 
 n = 1;
-feature = zeros(294,1);
+feature = zeros(nBlocks*nBlocks*6,1);
 
 for row=1:nBlocks
     for column=1:nBlocks
         startingRow = 1 + (row-1) * blockRows;
-        endingRow = 1 + (row) * blockRows;
+        endingRow = (row) * blockRows;
         
         startingColumn = 1 + (column-1) * blockColumns;
-        endingColumn = 1 + (column) * blockColumns;
+        endingColumn = (column) * blockColumns;
         imagePatch(:,:,:) = LSTImage(startingRow:endingRow,startingColumn:endingColumn,:);
         
         L = imagePatch(:,:,1);
         meanL = mean(L,'all');
-        stdL = std(L(:));
+        stdL = std(L,0,'all');
         feature(n,1) = meanL;
         feature(n+1,1) = stdL;
         
         S = imagePatch(:,:,2);
         meanS = mean(S,'all');
-        stdS = std(S(:));
+        stdS = std(S,0,'all');
         feature(n+2,1) = meanS;
         feature(n+3,1) = stdS;
         
-        T = imagePatch(:,:,2);
+        T = imagePatch(:,:,3);
         meanT = mean(T,'all');
-        stdT = std(T(:));
+        stdT = std(T,0,'all');
         feature(n+4,1) = meanT;
         feature(n+5,1) = stdT;
         n = n + 6;
@@ -62,5 +66,8 @@ for row=1:nBlocks
         
     end
 end
+
+
+
 
 
