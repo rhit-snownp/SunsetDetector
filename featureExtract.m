@@ -22,20 +22,20 @@ LSTImage(:,:,3) = Tmatrix;
 %evenly divides into 
 [rowsSize, columnsSize, ~] = size(LSTImage);
 
-blockRows = round(rowsSize/nBlocks);
-blockColumns = round(columnsSize/nBlocks);
+blockRows = floor(rowsSize/nBlocks);
+blockColumns = floor(columnsSize/nBlocks);
 
 
 n = 1;
 feature = zeros(nBlocks*nBlocks*6,1);
 
-for row=1:nBlocks
-    for column=1:nBlocks
-        startingRow = 1 + (row-1) * blockRows;
-        endingRow = (row) * blockRows;
+for row=(0:nBlocks-1)
+    for column=0:(nBlocks-1)
+        startingRow = 1 + (row) * blockRows;
+        endingRow = (row+1) * blockRows;
         
-        startingColumn = 1 + (column-1) * blockColumns;
-        endingColumn = (column) * blockColumns;
+        startingColumn = 1 + (column) * blockColumns;
+        endingColumn = (column+1) * blockColumns;
         imagePatch(:,:,:) = LSTImage(startingRow:endingRow,startingColumn:endingColumn,:);
         
         L = imagePatch(:,:,1);
