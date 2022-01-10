@@ -126,6 +126,7 @@ fprintf("The total time elapsed is %f seconds\n",timeElapsed);
 % Training Set: The Accuracy is 100.000000, with a TP=800, a FP=0, a TN=800 and a FN=0, TPR=100.000000, FPR=0.000000
 % Validation Set: The Accuracy is 91.500000, with a TP=274, a FP=25, a TN=275 and a FN=26, TPR=91.333333, FPR=8.333333
 % Test Set: The Accuracy is 88.777555, with a TP=435, a FP=49, a TN=451 and a FN=63, TPR=87.349398, FPR=9.800000
+% 
 % Optimized Hyperparameters are Kernel Scale: 12.720000, Box Constraint: 106.000000 for an accuracy of 50.100200
 % Training Set: The Accuracy is 100.000000, with a TP=800, a FP=0, a TN=800 and a FN=0, TPR=100.000000, FPR=0.000000
 % Validation Set: The Accuracy is 93.333333, with a TP=272, a FP=12, a TN=288 and a FN=28, TPR=90.666667, FPR=4.000000
