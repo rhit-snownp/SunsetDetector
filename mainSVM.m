@@ -46,7 +46,6 @@ trainLabel = cat(1, trainLabel, second.classificationLabel);
 
 % labelAndData = cat(2, trainData, trainLabel); 
 
-net = fitcsvm(trainData, trainLabel, 'KernelFunction', 'rbf', 'KernelScale', 10, 'BoxConstraint', 100,'Standardize',true); 
 
 %have the fitted net, now want to predict on the test data 
 first = store(3); 
@@ -60,6 +59,15 @@ testLabel = cat(1, testLabel, second.classificationLabel);
 predictedData = predict(net, testData);
 
 successRate =  sum(abs(predictedData==testLabel))/length(testLabel);
+
+
+
+resolution = 20; 
+maxKS = 30;
+maxBC = 250;
+[bestKS, bestBC, bestAccuracy] = hyperparameterGS(resolution,maxKS,maxBC,trainData,trainLabel,testData,testLabel)
+net = fitcsvm(trainData, trainLabel, 'KernelFunction', 'rbf', 'KernelScale', bestKS, 'BoxConstraint', bestBC,'Standardize',true); 
+
 
 % xTrain = imageDatastoreReader(trainImages);
 % yTrain = trainImages.Labels;
