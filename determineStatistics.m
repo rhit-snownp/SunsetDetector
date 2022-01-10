@@ -25,7 +25,7 @@ end
 Accuracy = 100 * (true_positive + true_negative) / (true_positive + false_positive + true_negative + false_negative);
 TPR = true_positive / (true_positive + false_negative);
 FPR = false_positive / (false_positive + true_negative);
-fprintf("The Accuracy is %f, with a TP=%d, a FP=%d, a TN=%d and a FN=%d, TPR=%f, FPR=%f",Accuracy,true_positive, false_positive, true_negative, false_negative,TPR*100, FPR*100);
+fprintf("The Accuracy is %f, with a TP=%d, a FP=%d, a TN=%d and a FN=%d, TPR=%f, FPR=%f\n",Accuracy,true_positive, false_positive, true_negative, false_negative,TPR*100, FPR*100);
 
 
 end
