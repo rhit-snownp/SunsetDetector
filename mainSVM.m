@@ -130,3 +130,71 @@ fprintf("The total time elapsed is %f seconds\n",timeElapsed);
 % Training Set: The Accuracy is 100.000000, with a TP=800, a FP=0, a TN=800 and a FN=0, TPR=100.000000, FPR=0.000000
 % Validation Set: The Accuracy is 93.333333, with a TP=272, a FP=12, a TN=288 and a FN=28, TPR=90.666667, FPR=4.000000
 % Test Set: The Accuracy is 89.078156, with a TP=424, a FP=35, a TN=465 and a FN=74, TPR=85.140562, FPR=7.000000
+
+
+
+%% Calculate an ROC Curve for Training and Validation Set
+
+bestBC = 106.000000 ;
+bestKS = 12.720000;
+net = fitcsvm(trainX, trainY, 'KernelFunction', 'rbf', 'KernelScale', bestKS, 'BoxConstraint', bestBC,'Standardize',true); 
+
+% ROC Curve for training set
+[~, distances] = predict(net, trainX);
+
+numPoints = 10000;
+thresholdValues = linspace(-1,1,numPoints);
+TruePositiveRateArray = ones(numPoints,1);
+FalsePositiveRateArray = ones(numPoints,1);
+
+for currentPoint = 1:numPoints
+    threshold = thresholdValues(1,currentPoint);
+    detectedClasses =  double(distances(:,2) >= threshold);
+    detectedClasses(detectedClasses == 0) = -1;
+    [~, ~, ~, ~, ~, TruePositiveRateArray(currentPoint,1), FalsePositiveRateArray(currentPoint,1)] = determineStatistics(detectedClasses,testY);
+end
+
+
+[figureHandle] = generateROC(TruePositiveRateArray,FalsePositiveRateArray,"ROC Curve for Training Set");
+
+
+% ROC Curve for validation set
+[~, distances] = predict(net, validateX);
+
+numPoints = 10000;
+thresholdValues = linspace(-1,1,numPoints);
+TruePositiveRateArray = ones(numPoints,1);
+FalsePositiveRateArray = ones(numPoints,1);
+
+for currentPoint = 1:numPoints
+    threshold = thresholdValues(1,currentPoint);
+    detectedClasses =  double(distances(:,2) >= threshold);
+    detectedClasses(detectedClasses == 0) = -1;
+    [~, ~, ~, ~, ~, TruePositiveRateArray(currentPoint,1), FalsePositiveRateArray(currentPoint,1)] = determineStatistics(detectedClasses,validateY);
+end
+
+
+[figureHandle] = generateROC(TruePositiveRateArray,FalsePositiveRateArray,"ROC Curve for Validation Set");
+
+
+% ROC Curve for Test set
+[~, distances] = predict(net, testX);
+
+numPoints = 10000;
+thresholdValues = linspace(-1,1,numPoints);
+TruePositiveRateArray = ones(numPoints,1);
+FalsePositiveRateArray = ones(numPoints,1);
+
+for currentPoint = 1:numPoints
+    threshold = thresholdValues(1,currentPoint);
+    detectedClasses =  double(distances(:,2) >= threshold);
+    detectedClasses(detectedClasses == 0) = -1;
+    [~, ~, ~, ~, ~, TruePositiveRateArray(currentPoint,1), FalsePositiveRateArray(currentPoint,1)] = determineStatistics(detectedClasses,testY);
+end
+
+
+[figureHandle] = generateROC(TruePositiveRateArray,FalsePositiveRateArray,"ROC Curve for Test Set");
+
+
+
+

@@ -9,7 +9,7 @@ hold on;
 % Plots using a blue line (see 'help plot' for shape and color codes 
 plot(FalsePositiveRateArray, TruePositiveRateArray, 'b-', 'LineWidth', 2);
 % Overlaid with circles at the data points
-plot(FalsePositiveRateArray, TruePositiveRateArray, 'bo', 'MarkerSize', 6, 'LineWidth', 2);
+plot(FalsePositiveRateArray, TruePositiveRateArray, 'bo', 'MarkerSize', 1, 'LineWidth', 1);
 
 
 % Title, labels, range for axes
