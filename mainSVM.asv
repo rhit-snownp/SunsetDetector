@@ -46,20 +46,8 @@ trainLabel = cat(1, trainLabel, second.classificationLabel);
 
 % labelAndData = cat(2, trainData, trainLabel); 
 
-net = fitcsvm(trainData, trainLabel, 'KernelFunction', 'rbf', 'KernelScale', 10, 'BoxConstraint', 100,'Standardize',true); 
+net = fitcsvm(trainData, trainLabel, 'KernelFunction', 'rbf', 'KernelScale', 5, 'BoxConstraint', boxConstraint,'Standardize',true); 
 
-%have the fitted net, now want to predict on the test data 
-first = store(3); 
-second = store(4); 
-testData = first.featureVector; 
-testData = cat(1, testData, second.featureVector); 
-
-testLabel = first.classificationLabel;
-testLabel = cat(1, testLabel, second.classificationLabel); 
-
-predictedData = predict(net, testData);
-
-successRate =  sum(abs(predictedData==testLabel))/length(testLabel);
 
 % xTrain = imageDatastoreReader(trainImages);
 % yTrain = trainImages.Labels;
