@@ -1,20 +1,26 @@
-function [true_positive, false_positive, true_negative, false_negative, Accuracy, TPR, FPR] = determineStatistics(detectedClasses,yTest)
+function [true_positive, false_positive, true_negative, false_negative, Accuracy, TPR, FPR, IncorrectImagesByIndex] = determineStatistics(detectedClasses,yTest)
 %Determination of TPR, FPR, TNR, FNR
 true_positive = 0;
 false_positive = 0;
 true_negative = 0;
 false_negative = 0;
-
+num_Incorrect = 1;
 
 for index=1:length(yTest)
     if(yTest(index) == 1 && detectedClasses(index) == 1)
         true_positive = true_positive + 1;
     elseif(yTest(index) == 1 && detectedClasses(index) == -1)
         false_negative = false_negative + 1;
+        IncorrectImagesByIndex(num_Incorrect,1) = index;
+        IncorrectImagesByIndex(num_Incorrect,2) = 1;
+        num_Incorrect = num_Incorrect + 1;
     elseif(yTest(index) == -1 && detectedClasses(index) == -1)
         true_negative = true_negative + 1;
     elseif(yTest(index) == -1 && detectedClasses(index) == 1)
         false_positive = false_positive + 1;
+        IncorrectImagesByIndex(num_Incorrect,1) = index;
+        IncorrectImagesByIndex(num_Incorrect,2) = 2;
+        num_Incorrect = num_Incorrect + 1;
         
     else
         fprintf("Error In Classification");

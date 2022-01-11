@@ -8,82 +8,86 @@ tic;
 %Reserved Dataset
 location = "C:\Users\snownp\OneDrive - Rose-Hulman Institute of Technology\Desktop\Rose-Hulman Schoolwork\Senior Year\Winter\CSSE-463\Projects\Sunset Detector\images\reserved\sunset";
 ds = datastore(location);
-featureVectorPos = imageDatastoreReader(ds);
+[featureVectorPos, filenamesPos] = imageDatastoreReader(ds);
 classificationLabelPos = ones(length(featureVectorPos),1);
 
 location = "C:\Users\snownp\OneDrive - Rose-Hulman Institute of Technology\Desktop\Rose-Hulman Schoolwork\Senior Year\Winter\CSSE-463\Projects\Sunset Detector\images\reserved\nonsunset";
 ds = datastore(location);
-featureVectorNeg = imageDatastoreReader(ds);
+[featureVectorNeg, filenamesNeg] = imageDatastoreReader(ds);
 classificationLabelNeg = -1 * ones(length(featureVectorNeg),1);
 
 featureVector = cat(1,featureVectorPos,featureVectorNeg);
 classificationLabel = cat(1,classificationLabelPos,classificationLabelNeg);
+filenames = cat(1,filenamesPos,filenamesNeg);
 currentDirectory = pwd;
 
 cd('FeatureVectors');
 fprintf("Saving Feature Vectors\n");
-save("Reserved_Feature_Vector",'featureVector','classificationLabel');
+save("Reserved_Feature_Vector",'featureVector','classificationLabel','filenames');
 cd(currentDirectory);
 
 
 %Test Dataset
 location = "C:\Users\snownp\OneDrive - Rose-Hulman Institute of Technology\Desktop\Rose-Hulman Schoolwork\Senior Year\Winter\CSSE-463\Projects\Sunset Detector\images\test\sunset";
 ds = datastore(location);
-featureVectorPos = imageDatastoreReader(ds);
+[featureVectorPos, filenamesPos] = imageDatastoreReader(ds);
 classificationLabelPos = ones(length(featureVectorPos),1);
 
 location = "C:\Users\snownp\OneDrive - Rose-Hulman Institute of Technology\Desktop\Rose-Hulman Schoolwork\Senior Year\Winter\CSSE-463\Projects\Sunset Detector\images\test\nonsunset";
 ds = datastore(location);
-featureVectorNeg = imageDatastoreReader(ds);
+[featureVectorNeg, filenamesNeg] = imageDatastoreReader(ds);
 classificationLabelNeg = -1 * ones(length(featureVectorNeg),1);
 
 featureVector = cat(1,featureVectorPos,featureVectorNeg);
 classificationLabel = cat(1,classificationLabelPos,classificationLabelNeg);
+filenames = cat(1,filenamesPos,filenamesNeg);
 currentDirectory = pwd;
 
 cd('FeatureVectors');
 fprintf("Saving Feature Vectors\n");
-save("Test_Feature_Vector",'featureVector','classificationLabel');
+save("Test_Feature_Vector",'featureVector','classificationLabel','filenames');
 cd(currentDirectory);
 
 %Train Dataset
 location = "C:\Users\snownp\OneDrive - Rose-Hulman Institute of Technology\Desktop\Rose-Hulman Schoolwork\Senior Year\Winter\CSSE-463\Projects\Sunset Detector\images\train\sunset";
 ds = datastore(location);
-featureVectorPos = imageDatastoreReader(ds);
+[featureVectorPos, filenamesPos] = imageDatastoreReader(ds);
 classificationLabelPos = ones(length(featureVectorPos),1);
 
 location = "C:\Users\snownp\OneDrive - Rose-Hulman Institute of Technology\Desktop\Rose-Hulman Schoolwork\Senior Year\Winter\CSSE-463\Projects\Sunset Detector\images\train\nonsunset";
 ds = datastore(location);
-featureVectorNeg = imageDatastoreReader(ds);
+[featureVectorNeg, filenamesNeg] = imageDatastoreReader(ds);
 classificationLabelNeg = -1 * ones(length(featureVectorNeg),1);
 
 featureVector = cat(1,featureVectorPos,featureVectorNeg);
 classificationLabel = cat(1,classificationLabelPos,classificationLabelNeg);
+filenames = cat(1,filenamesPos,filenamesNeg);
 currentDirectory = pwd;
 
 cd('FeatureVectors');
 fprintf("Saving Feature Vectors\n");
-save("Train_Feature_Vector",'featureVector','classificationLabel');
+save("Train_Feature_Vector",'featureVector','classificationLabel','filenames');
 cd(currentDirectory);
 
 %Validation Dataset
 location = "C:\Users\snownp\OneDrive - Rose-Hulman Institute of Technology\Desktop\Rose-Hulman Schoolwork\Senior Year\Winter\CSSE-463\Projects\Sunset Detector\images\validate\sunset";
 ds = datastore(location);
-featureVectorPos = imageDatastoreReader(ds);
+[featureVectorPos, filenamesPos] = imageDatastoreReader(ds);
 classificationLabelPos = ones(length(featureVectorPos),1);
 
 location = "C:\Users\snownp\OneDrive - Rose-Hulman Institute of Technology\Desktop\Rose-Hulman Schoolwork\Senior Year\Winter\CSSE-463\Projects\Sunset Detector\images\validate\nonsunset";
 ds = datastore(location);
-featureVectorNeg = imageDatastoreReader(ds);
+[featureVectorNeg, filenamesNeg] = imageDatastoreReader(ds);
 classificationLabelNeg = -1 * ones(length(featureVectorNeg),1);
 
 featureVector = cat(1,featureVectorPos,featureVectorNeg);
 classificationLabel = cat(1,classificationLabelPos,classificationLabelNeg);
+filenames = cat(1,filenamesPos,filenamesNeg);
 currentDirectory = pwd;
 
 cd('FeatureVectors');
 fprintf("Saving Feature Vectors\n");
-save("Validation_Feature_Vector",'featureVector','classificationLabel');
+save("Validation_Feature_Vector",'featureVector','classificationLabel','filenames');
 cd(currentDirectory);
 
 

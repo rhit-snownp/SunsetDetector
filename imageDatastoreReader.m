@@ -1,4 +1,4 @@
-function features = imageDatastoreReader(ds)
+function [features, filenames] = imageDatastoreReader(ds)
 % Example of using an image datastore.
 
 nBlocks = 7; % 
@@ -12,5 +12,6 @@ for i = 1:nImages
     fprintf('Processing %s\n', fileinfo.Filename);
     featureVector = featureExtract(img, nBlocks);
     features(row,:) = featureVector;
+    filenames(row,:) = {fileinfo.Filename};
     row = row + 1;
 end

@@ -9,6 +9,7 @@ close all;
 
 %filepath = '4343697713_9b4298c853_z.jpg';
 %filepath = '4340746902_e7c6610e91_z.jpg';
+filepath = '4063353003_4580c5a339_z.jpg';
 
 
 img = imread(filepath);
