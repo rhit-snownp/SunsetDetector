@@ -139,6 +139,7 @@ fprintf("The total time elapsed is %f seconds\n",timeElapsed);
 bestBC = 106.000000 ;
 bestKS = 12.720000;
 net = fitcsvm(trainX, trainY, 'KernelFunction', 'rbf', 'KernelScale', bestKS, 'BoxConstraint', bestBC,'Standardize',true); 
+save("trained_network",'net');
 
 % ROC Curve for training set
 [~, distances] = predict(net, trainX);
