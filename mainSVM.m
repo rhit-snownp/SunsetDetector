@@ -162,6 +162,11 @@ end
 % Validation Set: The Accuracy is 91.666667, with a TP=277, a FP=27, a TN=273 and a FN=23, TPR=92.333333, FPR=9.000000
 % Test Set: The Accuracy is 88.977956, with a TP=439, a FP=51, a TN=449 and a FN=59, TPR=88.152610, FPR=10.200000
 
+% Optimized Hyperparameters are Kernel Scale: 12.720000, Box Constraint: 106.000000 for an accuracy of 50.100200
+% Training Set: The Accuracy is 100.000000, with a TP=800, a FP=0, a TN=800 and a FN=0, TPR=100.000000, FPR=0.000000
+% Validation Set: The Accuracy is 93.333333, with a TP=272, a FP=12, a TN=288 and a FN=28, TPR=90.666667, FPR=4.000000
+% Test Set: The Accuracy is 89.078156, with a TP=424, a FP=35, a TN=465 and a FN=74, TPR=85.140562, FPR=7.000000
+% The total time elapsed is 232.566584 seconds
 
 %% Calculate an ROC Curve for Training and Validation Set
 
