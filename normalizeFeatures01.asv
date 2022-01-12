@@ -12,9 +12,7 @@ nFeatures = size(features, 2); % 294
 %normalize with respect to each feature, so looping over 294 features. 
 
 for featureInd = 1:nFeatures 
-    normed = features(:,featureInd); 
-    normed = normalize(normed); 
-    features(:,featureInd) = normed; 
+    normed = 
     
 end 
 
