@@ -45,26 +45,96 @@ reservedY = cell2mat(store(1,3));
 net = fitcsvm(trainX, trainY, 'KernelFunction', 'rbf','OptimizeHyperparameters','auto');  
 save("trained_network",'net');
 
+%%
 %Classifies Training Set
 [detectedClasses, distances] = predict(net, trainX);
 
 %Calculate Statistics
 fprintf("Training Set: ");
-[true_positive, false_positive, true_negative, false_negative, Accuracy, TPR, FPR] = determineStatistics(detectedClasses,trainY);
+[true_positive, false_positive, true_negative, false_negative, Accuracy, TPR, FPR] = determineStatistics(detectedClasses, distances, trainY);
 
 %Classifies Validation Set
 [detectedClasses, distances] = predict(net, validateX);
 
 %Calculate Statistics
 fprintf("Validation Set: ");
-[true_positive, false_positive, true_negative, false_negative, Accuracy, TPR, FPR] = determineStatistics(detectedClasses,validateY);
+[true_positive, false_positive, true_negative, false_negative, Accuracy, TPR, FPR] = determineStatistics(detectedClasses, distances, validateY);
 
 %Classifies Testing Set
 [detectedClasses, distances] = predict(net, testX);
 
 %Calculate Statistics
 fprintf("Test Set: ");
-[true_positive, false_positive, true_negative, false_negative, Accuracy, TPR, FPR, IncorrectImagesByIndex] = determineStatistics(detectedClasses,testY);
+[true_positive, false_positive, true_negative, false_negative, Accuracy, TPR, FPR] = determineStatistics(detectedClasses, distances, testY);
+
+
+
+%% Determining Best and Worst Image in Each Category:
+
+%True Positives:
+titleString = "True Positives:";
+%Far From Margin
+[~, maxImageIndex] = max(abs(true_positive(:,2)));
+maxImageGlobalIndex = true_positive(maxImageIndex,1);
+classification = detectedClasses(maxImageGlobalIndex);
+distance = distances(maxImageGlobalIndex);
+getImageFromIndex(store,net,maxImageGlobalIndex,titleString,classification,distance);
+
+%Close To Margin
+[~, minImageIndex] = min(abs(true_positive(:,2)));
+minImageGlobalIndex =true_positive(minImageIndex,1);
+classification = detectedClasses(minImageGlobalIndex);
+distance = distances(minImageGlobalIndex);
+getImageFromIndex(store,net,minImageGlobalIndex,titleString,classification,distance);
+
+%True Negatives:
+titleString = "True Negatives:";
+%Far From Margin
+[~, maxImageIndex] = max(abs(true_negative(:,2)));
+maxImageGlobalIndex =true_negative(maxImageIndex,1);
+classification = detectedClasses(maxImageGlobalIndex);
+distance = distances(maxImageGlobalIndex);
+getImageFromIndex(store,net,maxImageGlobalIndex,titleString,classification,distance);
+
+%Close To Margin
+[~, minImageIndex] = min(abs(true_negative(:,2)));
+minImageGlobalIndex =true_negative(minImageIndex,1);
+classification = detectedClasses(maxImageGlobalIndex);
+distance = distances(minImageGlobalIndex);
+getImageFromIndex(store,net,minImageGlobalIndex,titleString,classification,distance);
+
+%False Positives:
+titleString = "False Positives:";
+%Far From Margin
+[~, maxImageIndex] = max(abs(false_positive(:,2)));
+maxImageGlobalIndex =false_positive(maxImageIndex,1);
+classification = detectedClasses(maxImageGlobalIndex);
+distance = distances(maxImageGlobalIndex);
+getImageFromIndex(store,net,maxImageGlobalIndex,titleString,classification,distance);
+
+%Close To Margin
+[~, minImageIndex] = min(abs(false_positive(:,2)));
+minImageGlobalIndex =false_positive(minImageIndex,1);
+classification = detectedClasses(minImageGlobalIndex);
+distance = distances(minImageGlobalIndex);
+getImageFromIndex(store,net,minImageGlobalIndex,titleString,classification,distance);
+
+%False Negatives:
+titleString = "False Negatives:";
+%Far From Margin
+[~, maxImageIndex] = max(abs(false_negative(:,2)));
+maxImageGlobalIndex =false_negative(maxImageIndex,1);
+classification = detectedClasses(maxImageGlobalIndex);
+distance = distances(maxImageGlobalIndex);
+getImageFromIndex(store,net,maxImageGlobalIndex,titleString,classification,distance);
+
+%Close To Margin
+[~, minImageIndex] = min(abs(false_negative(:,2)));
+minImageGlobalIndex =false_negative(minImageIndex,1);
+classification = detectedClasses(minImageGlobalIndex);
+distance = distances(minImageGlobalIndex);
+getImageFromIndex(store,net,minImageGlobalIndex,titleString,classification,distance);
+    
 
 
 
@@ -83,52 +153,25 @@ net = fitcsvm(trainX, trainY, 'KernelFunction', 'rbf', 'KernelScale', bestKS, 'B
 
 %Calculate Statistics
 fprintf("Training Set: ");
-[true_positive, false_positive, true_negative, false_negative, Accuracy, TPR, FPR] = determineStatistics(detectedClasses,trainY);
+[true_positive, false_positive, true_negative, false_negative, Accuracy, TPR, FPR] = determineStatistics(detectedClasses, distances, trainY);
 
 %Classifies Validation Set
 [detectedClasses, distances] = predict(net, validateX);
 
 %Calculate Statistics
 fprintf("Validation Set: ");
-[true_positive, false_positive, true_negative, false_negative, Accuracy, TPR, FPR] = determineStatistics(detectedClasses,validateY);
+[true_positive, false_positive, true_negative, false_negative, Accuracy, TPR, FPR] = determineStatistics(detectedClasses, distances, validateY);
 
 %Classifies Testing Set
 [detectedClasses, distances] = predict(net, testX);
 
 %Calculate Statistics
 fprintf("Test Set: ");
-[true_positive, false_positive, true_negative, false_negative, Accuracy, TPR, FPR, IncorrectImagesByIndex] = determineStatistics(detectedClasses,testY);
+[true_positive, false_positive, true_negative, false_negative, Accuracy, TPR, FPR, IncorrectImagesByIndex] = determineStatistics(detectedClasses, distances, testY);
 
 
 timeElapsed = toc;
 fprintf("The total time elapsed is %f seconds\n",timeElapsed);
-
-%% Show all the images that failed, and why
-
-for index = 1:length(IncorrectImagesByIndex)
-    %grab the incorrect index from the array, and then find the image, load it and show the results
-    imageIndex = IncorrectImagesByIndex(index,1);
-   
-    temp = store(2,4);
-    testFilenames = [temp{:}]
-    correctFilename = string(testFilenames(imageIndex));
-    img = imread(correctFilename);
-
-    
-    sampleImageFeatures = normalizeFeatures01(featureExtract(img, 7));
-    %Classification
-    [detectedClasses, distances] = predict(net, sampleImageFeatures.');
-    
-    figure;
-    imshow(img);
-if(detectedClasses >=0)
-   title("Classification:  Sunset");
-else
-   title("Classification:  Not A Sunset");
-end
-    
-end
-
 
 
 
@@ -189,7 +232,7 @@ for currentPoint = 1:numPoints
     threshold = thresholdValues(1,currentPoint);
     detectedClasses =  double(distances(:,2) >= threshold);
     detectedClasses(detectedClasses == 0) = -1;
-    [~, ~, ~, ~, ~, TruePositiveRateArray(currentPoint,1), FalsePositiveRateArray(currentPoint,1)] = determineStatistics(detectedClasses,testY);
+    [~, ~, ~, ~, ~, TruePositiveRateArray(currentPoint,1), FalsePositiveRateArray(currentPoint,1)] = determineStatistics(detectedClasses, distances, testY);
 end
 
 
@@ -208,7 +251,7 @@ for currentPoint = 1:numPoints
     threshold = thresholdValues(1,currentPoint);
     detectedClasses =  double(distances(:,2) >= threshold);
     detectedClasses(detectedClasses == 0) = -1;
-    [~, ~, ~, ~, ~, TruePositiveRateArray(currentPoint,1), FalsePositiveRateArray(currentPoint,1)] = determineStatistics(detectedClasses,validateY);
+    [~, ~, ~, ~, ~, TruePositiveRateArray(currentPoint,1), FalsePositiveRateArray(currentPoint,1)] = determineStatistics(detectedClasses, distances, validateY);
 end
 
 
@@ -227,7 +270,7 @@ for currentPoint = 1:numPoints
     threshold = thresholdValues(1,currentPoint);
     detectedClasses =  double(distances(:,2) >= threshold);
     detectedClasses(detectedClasses == 0) = -1;
-    [~, ~, ~, ~, ~, TruePositiveRateArray(currentPoint,1), FalsePositiveRateArray(currentPoint,1)] = determineStatistics(detectedClasses,testY);
+    [~, ~, ~, ~, ~, TruePositiveRateArray(currentPoint,1), FalsePositiveRateArray(currentPoint,1)] = determineStatistics(detectedClasses, distances, testY);
 end
 
 
