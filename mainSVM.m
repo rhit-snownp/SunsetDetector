@@ -1,5 +1,5 @@
 clc;
-clear all;
+clear;
 close all;
 
 tic;
@@ -42,11 +42,8 @@ reservedY = cell2mat(store(1,3));
 
 
 %% Predict an optimal set of hyperparameters for use in an SVM using MATLAB as a starting point
-
-
-%net = fitcsvm(trainX, trainY, 'KernelFunction', 'rbf','OptimizeHyperparameters','auto'); 
-net = fitcsvm(trainX, trainY, 'KernelFunction', 'rbf'); 
-
+net = fitcsvm(trainX, trainY, 'KernelFunction', 'rbf','OptimizeHyperparameters','auto');  
+save("trained_network",'net');
 
 %Classifies Training Set
 [detectedClasses, distances] = predict(net, trainX);
@@ -67,9 +64,7 @@ fprintf("Validation Set: ");
 
 %Calculate Statistics
 fprintf("Test Set: ");
-[true_positive, false_positive, true_negative, false_negative, Accuracy, TPR, FPR] = determineStatistics(detectedClasses,testY);
-
-
+[true_positive, false_positive, true_negative, false_negative, Accuracy, TPR, FPR, IncorrectImagesByIndex] = determineStatistics(detectedClasses,testY);
 
 
 
@@ -110,29 +105,29 @@ fprintf("The total time elapsed is %f seconds\n",timeElapsed);
 
 %% Show all the images that failed, and why
 
-% for index = 1:length(IncorrectImagesByIndex)
-%     %grab the incorrect index from the array, and then find the image, load it and show the results
-%     imageIndex = IncorrectImagesByIndex(index,1);
-%    
-%     temp = store(2,4);
-%     testFilenames = [temp{:}]
-%     correctFilename = string(testFilenames(imageIndex));
-%     img = imread(correctFilename);
-% 
-%     
-%     sampleImageFeatures = featureExtract(img, 7);
-%     %Classification
-%     [detectedClasses, distances] = predict(net, sampleImageFeatures.');
-%     
-%     figure;
-%     imshow(img);
-% if(detectedClasses >=0)
-%    title("Classification:  Sunset");
-% else
-%    title("Classification:  Not A Sunset");
-% end
-%     
-% end
+for index = 1:length(IncorrectImagesByIndex)
+    %grab the incorrect index from the array, and then find the image, load it and show the results
+    imageIndex = IncorrectImagesByIndex(index,1);
+   
+    temp = store(2,4);
+    testFilenames = [temp{:}]
+    correctFilename = string(testFilenames(imageIndex));
+    img = imread(correctFilename);
+
+    
+    sampleImageFeatures = normalizeFeatures01(featureExtract(img, 7));
+    %Classification
+    [detectedClasses, distances] = predict(net, sampleImageFeatures.');
+    
+    figure;
+    imshow(img);
+if(detectedClasses >=0)
+   title("Classification:  Sunset");
+else
+   title("Classification:  Not A Sunset");
+end
+    
+end
 
 
 
@@ -168,6 +163,12 @@ fprintf("The total time elapsed is %f seconds\n",timeElapsed);
 % Validation Set: The Accuracy is 93.333333, with a TP=272, a FP=12, a TN=288 and a FN=28, TPR=90.666667, FPR=4.000000
 % Test Set: The Accuracy is 89.078156, with a TP=424, a FP=35, a TN=465 and a FN=74, TPR=85.140562, FPR=7.000000
 % The total time elapsed is 232.566584 seconds
+
+% Optimized Hyperparameters are Kernel Scale: 26.712044, Box Constraint: 188.352500 for an accuracy of 87.975952
+% Training Set: The Accuracy is 100.000000, with a TP=800, a FP=0, a TN=800 and a FN=0, TPR=100.000000, FPR=0.000000
+% Validation Set: The Accuracy is 92.166667, with a TP=271, a FP=18, a TN=282 and a FN=29, TPR=90.333333, FPR=6.000000
+% Test Set: The Accuracy is 87.975952, with a TP=428, a FP=50, a TN=450 and a FN=70, TPR=85.943775, FPR=10.000000
+% The total time elapsed is 655.990260 seconds
 
 %% Calculate an ROC Curve for Training and Validation Set
 

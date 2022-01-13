@@ -1,11 +1,13 @@
 clc;
-clear all;
+clear;
 close all;
 
 
 %Read in image data to test in network
+filepath = 'IMG_4194.jpg';
+%filepath = '12146515265_17fefc1709_z.jpg';
 %filepath = '14408978343_1c287f68e4_z.jpg';
-filepath = '13512361183_4371843400_z.jpg';
+%filepath = '13512361183_4371843400_z.jpg';
 
 %filepath = '4343697713_9b4298c853_z.jpg';
 %filepath = '4340746902_e7c6610e91_z.jpg';
@@ -18,7 +20,7 @@ img = imread(filepath);
 load('trained_network');
 
 nBlocks = 7;
-sampleImageFeatures = featureExtract(img, nBlocks);
+sampleImageFeatures = normalizeFeatures01(featureExtract(img, nBlocks));
 
 %Classification
 [detectedClasses, distances] = predict(net, sampleImageFeatures.');
