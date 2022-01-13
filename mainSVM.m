@@ -110,29 +110,29 @@ fprintf("The total time elapsed is %f seconds\n",timeElapsed);
 
 %% Show all the images that failed, and why
 
-for index = 1:length(IncorrectImagesByIndex)
-    %grab the incorrect index from the array, and then find the image, load it and show the results
-    imageIndex = IncorrectImagesByIndex(index,1);
-   
-    temp = store(2,4);
-    testFilenames = [temp{:}]
-    correctFilename = string(testFilenames(imageIndex));
-    img = imread(correctFilename);
-
-    
-    sampleImageFeatures = featureExtract(img, 7);
-    %Classification
-    [detectedClasses, distances] = predict(net, sampleImageFeatures.');
-    
-    figure;
-    imshow(img);
-if(detectedClasses >=0)
-   title("Classification:  Sunset");
-else
-   title("Classification:  Not A Sunset");
-end
-    
-end
+% for index = 1:length(IncorrectImagesByIndex)
+%     %grab the incorrect index from the array, and then find the image, load it and show the results
+%     imageIndex = IncorrectImagesByIndex(index,1);
+%    
+%     temp = store(2,4);
+%     testFilenames = [temp{:}]
+%     correctFilename = string(testFilenames(imageIndex));
+%     img = imread(correctFilename);
+% 
+%     
+%     sampleImageFeatures = featureExtract(img, 7);
+%     %Classification
+%     [detectedClasses, distances] = predict(net, sampleImageFeatures.');
+%     
+%     figure;
+%     imshow(img);
+% if(detectedClasses >=0)
+%    title("Classification:  Sunset");
+% else
+%    title("Classification:  Not A Sunset");
+% end
+%     
+% end
 
 
 

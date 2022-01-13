@@ -40,14 +40,6 @@ for resIterate = 1:5
             successRate =  sum(abs(predictedData==yTest))/length(yTest);
             meshAcc = cat(1,successRate,meshAcc); 
             dataAndConstraints(index,3) = successRate; 
-<<<<<<< Updated upstream
-            disp(successRate);
-           
-=======
-            %disp(successRate)
-
-            
->>>>>>> Stashed changes
             TPrate = 100*length(find(predictedData == 1 & yTest == 1))/length(find(yTest==1));
             FPrate = 100*length(find(predictedData == 1 & yTest == -1))/length(find(yTest==-1));
 
