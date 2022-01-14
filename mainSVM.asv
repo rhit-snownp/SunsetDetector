@@ -178,18 +178,12 @@ fprintf("The total time elapsed is %f seconds\n",timeElapsed);
 figure
 scatter3(meshKS,meshBC,meshAcc)
 
-[xq,yq] = meshgrid(0:0.1:maxKS, 0:0.1:maxBC);
-vq = griddata(meshKS,meshBC,meshAcc,xq,yq);  %(x,y,v) being your original data for plotting points
-figure
+[xq,yq] = meshgrid(0:.:maxKS, -2:.2:2);
+vq = griddata(x,y,v,xq,yq);  %(x,y,v) being your original data for plotting points
 mesh(xq,yq,vq)
-hold on
-plot3(meshKS,meshBC,meshAcc,'.','Color','k')
-hold off
 
-title("Plot of Optimized Hyperparameters");
-xlabel("Kernel Scale");
-ylabel("Box Constraint");
-zlabel("Accuracy");
+figure
+surf(x1,y1,z_surf);
 
 
 %% Calculate an ROC Curve for Training and Validation Set

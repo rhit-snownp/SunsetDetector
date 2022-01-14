@@ -8,7 +8,8 @@ F = TriScatteredInterp(x,y,z);
 % ti = -2:.25:2;
 % [qx,qy] = meshgrid(ti,ti);
 % qz = F(qx,qy);
-figure(1);scatter3(x,y,z);
+figure
+scatter3(x,y,z,'.');
 xlabel('kernelScale'); 
 ylabel('Bounding Constraint'); 
 zlabel('Accuracy on Test Set'); 
