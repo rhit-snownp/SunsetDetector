@@ -42,8 +42,8 @@ reservedY = cell2mat(store(1,3));
 
 
 %% Predict an optimal set of hyperparameters for use in an SVM using MATLAB as a starting point
-net = fitcsvm(trainX, trainY, 'KernelFunction', 'rbf','OptimizeHyperparameters','auto');  
-save("trained_network",'net');
+net = fitcsvm(trainX, trainY, 'KernelFunction', 'rbf');%,'OptimizeHyperparameters','auto');  
+%save("trained_network",'net');
 
 %%
 %Classifies Training Set
@@ -69,78 +69,78 @@ fprintf("Test Set: ");
 
 
 
-%% Determining Best and Worst Image in Each Category:
-
-%True Positives:
-titleString = "True Positives:";
-%Far From Margin
-[~, maxImageIndex] = max(abs(true_positive(:,2)));
-maxImageGlobalIndex = true_positive(maxImageIndex,1);
-classification = detectedClasses(maxImageGlobalIndex);
-distance = distances(maxImageGlobalIndex);
-getImageFromIndex(store,net,maxImageGlobalIndex,titleString,classification,distance);
-
-%Close To Margin
-[~, minImageIndex] = min(abs(true_positive(:,2)));
-minImageGlobalIndex =true_positive(minImageIndex,1);
-classification = detectedClasses(minImageGlobalIndex);
-distance = distances(minImageGlobalIndex);
-getImageFromIndex(store,net,minImageGlobalIndex,titleString,classification,distance);
-
-%True Negatives:
-titleString = "True Negatives:";
-%Far From Margin
-[~, maxImageIndex] = max(abs(true_negative(:,2)));
-maxImageGlobalIndex =true_negative(maxImageIndex,1);
-classification = detectedClasses(maxImageGlobalIndex);
-distance = distances(maxImageGlobalIndex);
-getImageFromIndex(store,net,maxImageGlobalIndex,titleString,classification,distance);
-
-%Close To Margin
-[~, minImageIndex] = min(abs(true_negative(:,2)));
-minImageGlobalIndex =true_negative(minImageIndex,1);
-classification = detectedClasses(maxImageGlobalIndex);
-distance = distances(minImageGlobalIndex);
-getImageFromIndex(store,net,minImageGlobalIndex,titleString,classification,distance);
-
-%False Positives:
-titleString = "False Positives:";
-%Far From Margin
-[~, maxImageIndex] = max(abs(false_positive(:,2)));
-maxImageGlobalIndex =false_positive(maxImageIndex,1);
-classification = detectedClasses(maxImageGlobalIndex);
-distance = distances(maxImageGlobalIndex);
-getImageFromIndex(store,net,maxImageGlobalIndex,titleString,classification,distance);
-
-%Close To Margin
-[~, minImageIndex] = min(abs(false_positive(:,2)));
-minImageGlobalIndex =false_positive(minImageIndex,1);
-classification = detectedClasses(minImageGlobalIndex);
-distance = distances(minImageGlobalIndex);
-getImageFromIndex(store,net,minImageGlobalIndex,titleString,classification,distance);
-
-%False Negatives:
-titleString = "False Negatives:";
-%Far From Margin
-[~, maxImageIndex] = max(abs(false_negative(:,2)));
-maxImageGlobalIndex =false_negative(maxImageIndex,1);
-classification = detectedClasses(maxImageGlobalIndex);
-distance = distances(maxImageGlobalIndex);
-getImageFromIndex(store,net,maxImageGlobalIndex,titleString,classification,distance);
-
-%Close To Margin
-[~, minImageIndex] = min(abs(false_negative(:,2)));
-minImageGlobalIndex =false_negative(minImageIndex,1);
-classification = detectedClasses(minImageGlobalIndex);
-distance = distances(minImageGlobalIndex);
-getImageFromIndex(store,net,minImageGlobalIndex,titleString,classification,distance);
-    
-
+% %% Determining Best and Worst Image in Each Category:
+% 
+% %True Positives:
+% titleString = "True Positives:";
+% %Far From Margin
+% [~, maxImageIndex] = max(abs(true_positive(:,2)));
+% maxImageGlobalIndex = true_positive(maxImageIndex,1);
+% classification = detectedClasses(maxImageGlobalIndex);
+% distance = distances(maxImageGlobalIndex);
+% getImageFromIndex(store,net,maxImageGlobalIndex,titleString,classification,distance);
+% 
+% %Close To Margin
+% [~, minImageIndex] = min(abs(true_positive(:,2)));
+% minImageGlobalIndex =true_positive(minImageIndex,1);
+% classification = detectedClasses(minImageGlobalIndex);
+% distance = distances(minImageGlobalIndex);
+% getImageFromIndex(store,net,minImageGlobalIndex,titleString,classification,distance);
+% 
+% %True Negatives:
+% titleString = "True Negatives:";
+% %Far From Margin
+% [~, maxImageIndex] = max(abs(true_negative(:,2)));
+% maxImageGlobalIndex =true_negative(maxImageIndex,1);
+% classification = detectedClasses(maxImageGlobalIndex);
+% distance = distances(maxImageGlobalIndex);
+% getImageFromIndex(store,net,maxImageGlobalIndex,titleString,classification,distance);
+% 
+% %Close To Margin
+% [~, minImageIndex] = min(abs(true_negative(:,2)));
+% minImageGlobalIndex =true_negative(minImageIndex,1);
+% classification = detectedClasses(maxImageGlobalIndex);
+% distance = distances(minImageGlobalIndex);
+% getImageFromIndex(store,net,minImageGlobalIndex,titleString,classification,distance);
+% 
+% %False Positives:
+% titleString = "False Positives:";
+% %Far From Margin
+% [~, maxImageIndex] = max(abs(false_positive(:,2)));
+% maxImageGlobalIndex =false_positive(maxImageIndex,1);
+% classification = detectedClasses(maxImageGlobalIndex);
+% distance = distances(maxImageGlobalIndex);
+% getImageFromIndex(store,net,maxImageGlobalIndex,titleString,classification,distance);
+% 
+% %Close To Margin
+% [~, minImageIndex] = min(abs(false_positive(:,2)));
+% minImageGlobalIndex =false_positive(minImageIndex,1);
+% classification = detectedClasses(minImageGlobalIndex);
+% distance = distances(minImageGlobalIndex);
+% getImageFromIndex(store,net,minImageGlobalIndex,titleString,classification,distance);
+% 
+% %False Negatives:
+% titleString = "False Negatives:";
+% %Far From Margin
+% [~, maxImageIndex] = max(abs(false_negative(:,2)));
+% maxImageGlobalIndex =false_negative(maxImageIndex,1);
+% classification = detectedClasses(maxImageGlobalIndex);
+% distance = distances(maxImageGlobalIndex);
+% getImageFromIndex(store,net,maxImageGlobalIndex,titleString,classification,distance);
+% 
+% %Close To Margin
+% [~, minImageIndex] = min(abs(false_negative(:,2)));
+% minImageGlobalIndex =false_negative(minImageIndex,1);
+% classification = detectedClasses(minImageGlobalIndex);
+% distance = distances(minImageGlobalIndex);
+% getImageFromIndex(store,net,minImageGlobalIndex,titleString,classification,distance);
+%     
+% 
 
 
 
 %% Train and evaluate an SVM with Optimal HyperParameters Manually
-resolution = 20; 
+resolution = 2; 
 maxKS = 50;
 maxBC = 500;
 [bestKS, bestBC, bestAccuracy,meshKS,meshBC,meshAcc] = hyperparameterGS(resolution,maxKS,maxBC,trainX,trainY,testX,testY);
@@ -167,7 +167,7 @@ fprintf("Validation Set: ");
 
 %Calculate Statistics
 fprintf("Test Set: ");
-[true_positive, false_positive, true_negative, false_negative, Accuracy, TPR, FPR, IncorrectImagesByIndex] = determineStatistics(detectedClasses, distances, testY);
+[true_positive, false_positive, true_negative, false_negative, Accuracy, TPR, FPR] = determineStatistics(detectedClasses, distances, testY);
 
 
 timeElapsed = toc;

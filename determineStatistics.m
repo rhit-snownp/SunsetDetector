@@ -4,6 +4,10 @@ num_true_positive = 1;
 num_false_positive = 1;
 num_true_negative = 1;
 num_false_negative = 1;
+true_positive = 0;
+false_positive = 0;
+true_negative = 0;
+false_negative = 0;
 
 for index=1:length(yTest)
     if(yTest(index) == 1 && detectedClasses(index) == 1)

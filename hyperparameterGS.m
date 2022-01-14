@@ -1,4 +1,4 @@
-function [bestKS, bestBC, bestAccuracy,meshKS,meshBC,meshAcc] = hyperparameterGS(resolution,maxKS,maxBC,xTrain,yTrain,xTest,yTest)
+function [bestKS, bestBC, bestAccuracy,meshKS,meshBC,meshAcc,numSupportVectors] = hyperparameterGS(resolution,maxKS,maxBC,xTrain,yTrain,xTest,yTest)
 
 %iterate this 3 times for zooming in with resolution of 10 
 
@@ -15,6 +15,8 @@ dataAndConstraints = zeros(resolution*resolution,3);
 meshKS = [];
 meshBC = [];
 meshAcc = [];
+numSupportVectors = [];
+
 
 for resIterate = 1:5 
     for kS = 1:resolution
@@ -31,7 +33,8 @@ for resIterate = 1:5
             dataAndConstraints(index,2) = boxConstraint;
 
             net = fitcsvm(xTrain, yTrain, 'KernelFunction', 'rbf', 'KernelScale', kernelScale, 'BoxConstraint', boxConstraint); 
-
+            numSupportVectors = cat(1, net.SupportVectors, numSupportVectors); 
+            
             predictedData = predict(net, xTest);
             
 %             disp(size(predictedData))
