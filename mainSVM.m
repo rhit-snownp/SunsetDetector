@@ -141,12 +141,16 @@ fprintf("Test Set: ");
 
 %% Train and evaluate an SVM with Optimal HyperParameters Manually
 resolution = 100; 
-maxKS = 500;
-maxBC = 500;
-[bestKS, bestBC, bestAccuracy,meshKS,meshBC,meshAcc] = hyperparameterGS(resolution,maxKS,maxBC,trainX,trainY,testX,testY);
-fprintf("Optimized Hyperparameters are Kernel Scale: %f, Box Constraint: %f for an accuracy of %f\n", bestKS, bestBC, bestAccuracy * 100);
+maxKS = 200;
+maxBC = 200;
+minKS = 0;
+minBC = 0;
 
+%[bestKS, bestBC, bestAccuracy,meshKS,meshBC,meshAcc] = hyperparameterGS(resolution,maxKS,maxBC,trainX,trainY,testX,testY);
+[bestKS, bestBC, bestAccuracy,meshKS,meshBC,meshAcc,numSupportVectors] = optimalGridSearch(resolution,minKS,maxKS,minBC,maxBC,trainX,trainY,testX,testY);
 net = fitcsvm(trainX, trainY, 'KernelFunction', 'rbf', 'KernelScale', bestKS, 'BoxConstraint', bestBC,'Standardize',true); 
+fprintf("Optimized Hyperparameters are Kernel Scale: %f, Box Constraint: %f for an accuracy of %f with %d support vectors\n", bestKS, bestBC, bestAccuracy * 100, length(net.SupportVectorLabels));
+%save("trained_network",'net');
 
 %Classifies Training Set
 [detectedClasses, distances] = predict(net, trainX);
@@ -197,7 +201,35 @@ zlabel("Accuracy");
 bestBC = 106.000000 ;
 bestKS = 12.720000;
 net = fitcsvm(trainX, trainY, 'KernelFunction', 'rbf', 'KernelScale', bestKS, 'BoxConstraint', bestBC,'Standardize',true); 
-save("trained_network",'net');
+fprintf("Optimized Hyperparameters are Kernel Scale: %f, Box Constraint: %f with %d support vectors\n", bestKS, bestBC, length(net.SupportVectorLabels));
+
+%save("trained_network",'net');
+
+
+%Classifies Training Set
+[detectedClasses, distances] = predict(net, trainX);
+
+%Calculate Statistics
+fprintf("Training Set: ");
+[true_positive, false_positive, true_negative, false_negative, Accuracy, TPR, FPR] = determineStatistics(detectedClasses, distances, trainY);
+
+%Classifies Validation Set
+[detectedClasses, distances] = predict(net, validateX);
+
+%Calculate Statistics
+fprintf("Validation Set: ");
+[true_positive, false_positive, true_negative, false_negative, Accuracy, TPR, FPR] = determineStatistics(detectedClasses, distances, validateY);
+
+%Classifies Testing Set
+[detectedClasses, distances] = predict(net, testX);
+
+%Calculate Statistics
+fprintf("Test Set: ");
+[true_positive, false_positive, true_negative, false_negative, Accuracy, TPR, FPR] = determineStatistics(detectedClasses, distances, testY);
+
+
+
+%%
 
 % ROC Curve for training set
 [~, distances] = predict(net, trainX);
