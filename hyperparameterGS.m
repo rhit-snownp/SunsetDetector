@@ -9,16 +9,18 @@ minBC = 0;
 bestKS = 0;
 bestBC = 0;
 bestAccuracy = 0;
+numIterations = 3;
 
 ROCstuff = zeros(resolution*resolution,2);
 dataAndConstraints = zeros(resolution*resolution,3);
-meshKS = [];
-meshBC = [];
-meshAcc = [];
-numSupportVectors = [];
+meshKS = zeros(1,numIterations*resolution*resolution); 
+meshBC = zeros(1,numIterations*resolution*resolution); 
+meshAcc = zeros(1,numIterations*resolution*resolution); 
+numSupportVectors = zeros(1,numIterations*resolution*resolution); 
 
+index2 = 0; 
 
-for resIterate = 1:5 
+for numIterations = 1:3 
     for kS = 1:resolution
         for bC = 1:resolution 
             index = resolution*kS+bC-resolution; 
@@ -26,14 +28,14 @@ for resIterate = 1:5
             kernelScale = kS*(maxKS-minKS)/resolution+minKS;
             boxConstraint = bC*(maxBC-minBC)/resolution+minBC;
 
-            meshKS = cat(1,kernelScale,meshKS); 
-            meshBC = cat(1,boxConstraint,meshBC);
+            meshKS(1,index2) = kernelScale;  
+            meshBC(1,index2) = boxConstraint;
             
             dataAndConstraints(index,1) = kernelScale; 
             dataAndConstraints(index,2) = boxConstraint;
 
             net = fitcsvm(xTrain, yTrain, 'KernelFunction', 'rbf', 'KernelScale', kernelScale, 'BoxConstraint', boxConstraint); 
-            numSupportVectors = cat(1, net.SupportVectors, numSupportVectors); 
+            numSupportVectors(1,index2) = net.SupportVectors; 
             
             predictedData = predict(net, xTest);
             
@@ -41,7 +43,7 @@ for resIterate = 1:5
 %             disp(size(yTest))
             
             successRate =  sum(abs(predictedData==yTest))/length(yTest);
-            meshAcc = cat(1,successRate,meshAcc); 
+            meshAcc(1,index2) = successRate; 
             dataAndConstraints(index,3) = successRate; 
             TPrate = 100*length(find(predictedData == 1 & yTest == 1))/length(find(yTest==1));
             FPrate = 100*length(find(predictedData == 1 & yTest == -1))/length(find(yTest==-1));
