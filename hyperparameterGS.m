@@ -23,6 +23,7 @@ index2 = 0;
 for numIterations = 1:3 
     for kS = 1:resolution
         for bC = 1:resolution 
+            index2 = index2+1;
             index = resolution*kS+bC-resolution; 
 
             kernelScale = kS*(maxKS-minKS)/resolution+minKS;
@@ -35,7 +36,8 @@ for numIterations = 1:3
             dataAndConstraints(index,2) = boxConstraint;
 
             net = fitcsvm(xTrain, yTrain, 'KernelFunction', 'rbf', 'KernelScale', kernelScale, 'BoxConstraint', boxConstraint); 
-            numSupportVectors(1,index2) = net.SupportVectors; 
+            
+            numSupportVectors(1,index2) = size(net.SupportVectors,1); 
             
             predictedData = predict(net, xTest);
             

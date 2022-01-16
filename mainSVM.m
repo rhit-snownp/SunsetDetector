@@ -146,8 +146,9 @@ maxBC = 200;
 minKS = 0;
 minBC = 0;
 
-%[bestKS, bestBC, bestAccuracy,meshKS,meshBC,meshAcc] = hyperparameterGS(resolution,maxKS,maxBC,trainX,trainY,testX,testY);
-[bestKS, bestBC, bestAccuracy,meshKS,meshBC,meshAcc,numSupportVectors] = optimalGridSearch(resolution,minKS,maxKS,minBC,maxBC,trainX,trainY,testX,testY);
+[bestKS, bestBC, bestAccuracy,meshKS,meshBC,meshAcc] = hyperparameterGS(resolution,maxKS,maxBC,trainX,trainY,testX,testY);
+
+%[bestKS, bestBC, bestAccuracy,meshKS,meshBC,meshAcc,numSupportVectors] = optimalGridSearch(resolution,minKS,maxKS,minBC,maxBC,trainX,trainY,testX,testY);
 net = fitcsvm(trainX, trainY, 'KernelFunction', 'rbf', 'KernelScale', bestKS, 'BoxConstraint', bestBC,'Standardize',true); 
 fprintf("Optimized Hyperparameters are Kernel Scale: %f, Box Constraint: %f for an accuracy of %f with %d support vectors\n", bestKS, bestBC, bestAccuracy * 100, length(net.SupportVectorLabels));
 %save("trained_network",'net');
