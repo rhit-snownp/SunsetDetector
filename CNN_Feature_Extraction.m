@@ -42,7 +42,7 @@ YTest = testingDataStore.Labels;
 YValidate = validationDataStore.Labels;
 
 %% Fit an SVM to the Training Data
-SVMmodel = fitcecoc(featuresTrain,YTrain);
+[SVMmodel,HyperparameterOptimizationResults] = fitcecoc(featuresTrain,YTrain);
 
 %Predict the Results
 [YPredTest, distancesTest] = predict(SVMmodel,featuresTest);
@@ -58,7 +58,6 @@ fprintf("Testing Accuracy: %f, Training Accuracy %f, Validation Accuracy %f\n",a
 
 elapsedTime = toc;
 fprintf("The total time elapsed is %f seconds\n",elapsedTime);
-
 
 
 
