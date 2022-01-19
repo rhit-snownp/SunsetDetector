@@ -32,7 +32,7 @@ for index=1:length(yTest)
         
         
     else
-        fprintf("Error In Classification");
+        fprintf("Error In Classification\n");
     end
         
 end
