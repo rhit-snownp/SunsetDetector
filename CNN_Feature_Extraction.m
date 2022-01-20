@@ -13,8 +13,10 @@ tic;
 filepath = "C:\Users\snownp\OneDrive - Rose-Hulman Institute of Technology\Desktop\Rose-Hulman Schoolwork\Senior Year\Winter\CSSE-463\Projects\Sunset Detector\images\train";
 trainingDataStore = imageDatastore(filepath,'IncludeSubfolders',true,'LabelSource','foldernames');
 
+
 filepath = "C:\Users\snownp\OneDrive - Rose-Hulman Institute of Technology\Desktop\Rose-Hulman Schoolwork\Senior Year\Winter\CSSE-463\Projects\Sunset Detector\images\test";
 testingDataStore = imageDatastore(filepath,'IncludeSubfolders',true,'LabelSource','foldernames');
+
 
 filepath = "C:\Users\snownp\OneDrive - Rose-Hulman Institute of Technology\Desktop\Rose-Hulman Schoolwork\Senior Year\Winter\CSSE-463\Projects\Sunset Detector\images\validate";
 validationDataStore = imageDatastore(filepath,'IncludeSubfolders',true,'LabelSource','foldernames');
@@ -37,6 +39,21 @@ featuresTest = activations(net,augmentedTest,layer,'OutputAs','rows');
 featuresValidation = activations(net,augmentedValidation,layer,'OutputAs','rows');
 
 %% Extract the class labels from the training and test data.
+tempLableArray = zeros(length(trainingDataStore.Labels),1);
+tempLableArray(trainingDataStore.Labels == 'sunset') = 1;
+tempLableArray(trainingDataStore.Labels == 'nonsunset') = -1;
+trainingDataStore.Labels = tempLableArray;
+
+tempLableArray = zeros(length(testingDataStore.Labels),1);
+tempLableArray(testingDataStore.Labels == 'sunset') = 1;
+tempLableArray(testingDataStore.Labels == 'nonsunset') = -1;
+testingDataStore.Labels = tempLableArray;
+
+tempLableArray = zeros(length(validationDataStore.Labels),1);
+tempLableArray(validationDataStore.Labels == 'sunset') = 1;
+tempLableArray(validationDataStore.Labels == 'nonsunset') = -1;
+validationDataStore.Labels = tempLableArray;
+
 YTrain = trainingDataStore.Labels;
 YTest = testingDataStore.Labels;
 YValidate = validationDataStore.Labels;
@@ -73,7 +90,7 @@ for currentPoint = 1:numPoints
     threshold = thresholdValues(1,currentPoint);
     detectedClasses =  double(distancesTest(:,2) >= threshold);
     detectedClasses(detectedClasses == 0) = -1;
-    [~, ~, ~, ~, ~, TruePositiveRateArray(currentPoint,1), FalsePositiveRateArray(currentPoint,1)] = determineCNNStatistics(YPredTest, distancesTest, YTest);
+    [~, ~, ~, ~, ~, TruePositiveRateArray(currentPoint,1), FalsePositiveRateArray(currentPoint,1)] = determineStatistics(detectedClasses, distancesTest, YTest);
 end
 
 
@@ -91,7 +108,7 @@ for currentPoint = 1:numPoints
     threshold = thresholdValues(1,currentPoint);
     detectedClasses =  double(distancesTrain(:,2) >= threshold);
     detectedClasses(detectedClasses == 0) = -1;
-    [~, ~, ~, ~, ~, TruePositiveRateArray(currentPoint,1), FalsePositiveRateArray(currentPoint,1)] = determineCNNStatistics(YPredTrain, distancesTrain, YTrain);
+    [~, ~, ~, ~, ~, TruePositiveRateArray(currentPoint,1), FalsePositiveRateArray(currentPoint,1)] = determineStatistics(detectedClasses, distancesTrain, YTrain);
 end
 
 
@@ -108,7 +125,7 @@ for currentPoint = 1:numPoints
     threshold = thresholdValues(1,currentPoint);
     detectedClasses =  double(distancesValidate(:,2) >= threshold);
     detectedClasses(detectedClasses == 0) = -1;
-    [~, ~, ~, ~, ~, TruePositiveRateArray(currentPoint,1), FalsePositiveRateArray(currentPoint,1)] = determineCNNStatistics(YPredValidate, distancesValidate, YValidate);
+    [~, ~, ~, ~, ~, TruePositiveRateArray(currentPoint,1), FalsePositiveRateArray(currentPoint,1)] = determineStatistics(detectedClasses, distancesValidate, YValidate);
 end
 
 
