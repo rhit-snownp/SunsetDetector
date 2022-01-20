@@ -62,7 +62,6 @@ fprintf("The total time elapsed is %f seconds\n",elapsedTime);
 
 
 %% Generate all of the ROC Curves
-
 % ROC Curve for Test set
 numPoints = 100;
 thresholdValues = linspace(-1,1,numPoints);
@@ -98,7 +97,7 @@ end
 
 [figureHandle] = generateROC(TruePositiveRateArray,FalsePositiveRateArray,"ROC Curve for Train Set");
 
-
+%%
 % ROC Curve for Validation set
 numPoints = 100;
 thresholdValues = linspace(-1,1,numPoints);
