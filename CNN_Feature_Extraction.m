@@ -10,15 +10,15 @@ close all;
 tic;
 
 %% Create Datastores for Each Dataset
-filepath = "C:\Users\snownp\OneDrive - Rose-Hulman Institute of Technology\Desktop\Rose-Hulman Schoolwork\Senior Year\Winter\CSSE-463\Projects\Sunset Detector\images\train";
+filepath = "..\\images\train";
 trainingDataStore = imageDatastore(filepath,'IncludeSubfolders',true,'LabelSource','foldernames');
 
 
-filepath = "C:\Users\snownp\OneDrive - Rose-Hulman Institute of Technology\Desktop\Rose-Hulman Schoolwork\Senior Year\Winter\CSSE-463\Projects\Sunset Detector\images\test";
+filepath = "..\\images\test";
 testingDataStore = imageDatastore(filepath,'IncludeSubfolders',true,'LabelSource','foldernames');
 
 
-filepath = "C:\Users\snownp\OneDrive - Rose-Hulman Institute of Technology\Desktop\Rose-Hulman Schoolwork\Senior Year\Winter\CSSE-463\Projects\Sunset Detector\images\validate";
+filepath = "..\\images\validate";
 validationDataStore = imageDatastore(filepath,'IncludeSubfolders',true,'LabelSource','foldernames');
 
 
