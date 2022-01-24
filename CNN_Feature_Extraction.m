@@ -24,7 +24,7 @@ validationDataStore = imageDatastore(filepath,'IncludeSubfolders',true,'LabelSou
 
 %% Load in Pre-Trained CNN
 net = alexnet;
-net.Layers;
+net.Layers
 inputSize = net.Layers(1).InputSize;
 
 %% Create the augmented datastores with the correct input size
@@ -59,8 +59,9 @@ YTest = testingDataStore.Labels;
 YValidate = validationDataStore.Labels;
 
 %% Fit an SVM to the Training Data
-[SVMmodel,HyperparameterOptimizationResults] = fitcecoc(featuresTrain,YTrain);
+[SVMmodel,HyperparameterOptimizationResults] = fitcecoc(featuresTrain,YTrain,'OptimizeHyperparameters','auto');
 
+%%
 %Predict the Results
 [YPredTest, distancesTest] = predict(SVMmodel,featuresTest);
 accuracyTest = mean(YPredTest == YTest);
@@ -130,3 +131,103 @@ end
 
 
 [figureHandle] = generateROC(TruePositiveRateArray,FalsePositiveRateArray,"ROC Curve for Validation Set");
+
+
+%% Determining Best and Worst Image in Each Category:
+
+
+%Classifies Testing Set
+[detectedClasses, distances] = predict(SVMmodel, featuresTest);
+
+%Calculate Statistics
+fprintf("Test Set: ");
+[true_positive, false_positive, true_negative, false_negative, Accuracy, TPR, FPR] = determineStatistics(detectedClasses, distances, YTest);
+
+%True Positives:
+titleString = "True Positives:";
+%Far From Margin
+[~, maxImageIndex] = max(abs(true_positive(:,2)));
+maxImageGlobalIndex = true_positive(maxImageIndex,1);
+classification = detectedClasses(maxImageGlobalIndex);
+distance = distances(maxImageGlobalIndex);
+getImageFromIndexCNN(testingDataStore,net,maxImageGlobalIndex,titleString,classification,distance);
+
+%Close To Margin
+[~, minImageIndex] = min(abs(true_positive(:,2)));
+minImageGlobalIndex =true_positive(minImageIndex,1);
+classification = detectedClasses(minImageGlobalIndex);
+distance = distances(minImageGlobalIndex);
+getImageFromIndexCNN(testingDataStore,net,minImageGlobalIndex,titleString,classification,distance);
+
+%True Negatives:
+titleString = "True Negatives:";
+%Far From Margin
+[~, maxImageIndex] = max(abs(true_negative(:,2)));
+maxImageGlobalIndex =true_negative(maxImageIndex,1);
+classification = detectedClasses(maxImageGlobalIndex);
+distance = distances(maxImageGlobalIndex);
+getImageFromIndexCNN(testingDataStore,net,maxImageGlobalIndex,titleString,classification,distance);
+
+%Close To Margin
+[~, minImageIndex] = min(abs(true_negative(:,2)));
+minImageGlobalIndex =true_negative(minImageIndex,1);
+classification = detectedClasses(maxImageGlobalIndex);
+distance = distances(minImageGlobalIndex);
+getImageFromIndexCNN(testingDataStore,net,minImageGlobalIndex,titleString,classification,distance);
+
+%False Positives:
+titleString = "False Positives:";
+%Far From Margin
+[~, maxImageIndex] = max(abs(false_positive(:,2)));
+maxImageGlobalIndex =false_positive(maxImageIndex,1);
+classification = detectedClasses(maxImageGlobalIndex);
+distance = distances(maxImageGlobalIndex);
+getImageFromIndexCNN(testingDataStore,net,maxImageGlobalIndex,titleString,classification,distance);
+
+%Close To Margin
+[~, minImageIndex] = min(abs(false_positive(:,2)));
+minImageGlobalIndex =false_positive(minImageIndex,1);
+classification = detectedClasses(minImageGlobalIndex);
+distance = distances(minImageGlobalIndex);
+getImageFromIndexCNN(testingDataStore,net,minImageGlobalIndex,titleString,classification,distance);
+
+%False Negatives:
+titleString = "False Negatives:";
+%Far From Margin
+[~, maxImageIndex] = max(abs(false_negative(:,2)));
+maxImageGlobalIndex =false_negative(maxImageIndex,1);
+classification = detectedClasses(maxImageGlobalIndex);
+distance = distances(maxImageGlobalIndex);
+getImageFromIndexCNN(testingDataStore,net,maxImageGlobalIndex,titleString,classification,distance);
+
+%Close To Margin
+[~, minImageIndex] = min(abs(false_negative(:,2)));
+minImageGlobalIndex =false_negative(minImageIndex,1);
+classification = detectedClasses(minImageGlobalIndex);
+distance = distances(minImageGlobalIndex);
+getImageFromIndexCNN(testingDataStore,net,minImageGlobalIndex,titleString,classification,distance);
+  
+
+%% Calculate overall statistics
+%Classifies Training Set
+[detectedClasses, distances] = predict(SVMmodel, featuresTrain);
+
+%Calculate Statistics
+fprintf("Training Set: ");
+[true_positive, false_positive, true_negative, false_negative, Accuracy, TPR, FPR] = determineStatistics(detectedClasses, distances, YTrain);
+
+%Classifies Validation Set
+[detectedClasses, distances] = predict(SVMmodel, featuresValidation);
+
+%Calculate Statistics
+fprintf("Validation Set: ");
+[true_positive, false_positive, true_negative, false_negative, Accuracy, TPR, FPR] = determineStatistics(detectedClasses, distances, YValidate);
+
+%Classifies Testing Set
+[detectedClasses, distances] = predict(SVMmodel, featuresTest);
+
+%Calculate Statistics
+fprintf("Test Set: ");
+[true_positive, false_positive, true_negative, false_negative, Accuracy, TPR, FPR] = determineStatistics(detectedClasses, distances, YTest);
+
+
